@@ -1,0 +1,15 @@
+org\openapitools\api\AuthApiController.class
+org\openapitools\model\AuthLoginPostRequest.class
+org\openapitools\api\DocumentsApi.class
+org\openapitools\api\DocumentsApiController.class
+org\openapitools\model\DocumentsSearchGet200ResponseInner.class
+org\openapitools\OpenApiGeneratorApplication.class
+org\openapitools\RFC3339DateFormat.class
+org\openapitools\model\DocumentsDocumentIdPutRequest.class
+org\openapitools\model\DocumentsDocumentIdStatusGet200Response.class
+org\openapitools\api\AuthApi.class
+org\openapitools\model\AuthRegisterPostRequest.class
+org\openapitools\api\ApiUtil.class
+org\openapitools\configuration\SpringDocConfiguration.class
+org\openapitools\configuration\HomeController.class
+org\openapitools\model\DocumentsDocumentIdStatusGet200Response$StatusEnum.class

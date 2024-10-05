@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  title: SWEN API
+  description: API for managing documents with OCR, tagging, and search functionality.
+  version: 1.0.0
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - email
+                - password
+      responses:
+        '201':
+          description: User registered successfully
+
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Unauthorized
+
+  /documents:
+    post:
+      summary: Upload a document
+      description: Uploads a document, performs OCR and indexes it in ElasticSearch.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Document uploaded and indexed
+          
+  /documents/search:
+    get:
+      summary: Search for a document
+      description: Full-text and fuzzy search in ElasticSearch.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    document_id:
+                      type: string
+                    content:
+                      type: string
+                    tags:
+                      type: array
+                      items:
+                        type: string
+
+  /documents/{documentId}:
+    put:
+      summary: Update a document's metadata
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Document metadata updated
+          
+    delete:
+      summary: Delete a document
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Document deleted successfully
+          
+  /documents/{documentId}/status:
+    get:
+      summary: Check the status of the OCR processing
+      description: Returns the current status of the OCR and indexing process for the specified document.
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status of the OCR process
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [pending, processing, completed, failed]

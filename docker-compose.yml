@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build:
+      context: ./backend/generated-springboot
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    restart: always
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - nginx  # Backend startet erst, wenn nginx bereit ist
+
+  nginx:
+    build:
+      context: ./frontend  # Verweis auf den webserver-Ordner
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"  # Externe Anfragen auf Port 80 leiten auf NGINX
+    restart: always
+    depends_on:
+      - frontend  # NGINX startet erst, wenn das Frontend bereit ist
+    volumes:
+      # Kopiere die gebauten Dateien aus dem Frontend-Build
+      - frontend-output:/usr/share/nginx/html  # Mountet die gebauten Angular-Dateien in das NGINX HTML-Verzeichnis
+
+  frontend:
+    build:
+      context: ./frontend  # Refers to the Angular frontend folder
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      # Mount the output of the Angular build to the shared volume
+      - frontend-output:/app/dist/frontend
+
+volumes:
+  frontend-output:  # Volume für die gebauten Angular-Dateien
