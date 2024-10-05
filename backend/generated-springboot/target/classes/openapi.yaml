@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  description: "API for managing documents with OCR, tagging, and search functionality."
+  title: SWEN API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /auth/register:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_auth_register_post_request'
+        required: true
+      responses:
+        "201":
+          description: User registered successfully
+      summary: Register a new user
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /auth/login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_auth_login_post_request'
+        required: true
+      responses:
+        "200":
+          description: Login successful
+        "401":
+          description: Unauthorized
+      summary: User login
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /documents:
+    post:
+      description: "Uploads a document, performs OCR and indexes it in ElasticSearch."
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/_documents_post_request'
+        required: true
+      responses:
+        "201":
+          description: Document uploaded and indexed
+      summary: Upload a document
+      x-content-type: multipart/form-data
+      x-accepts:
+      - application/json
+  /documents/search:
+    get:
+      description: Full-text and fuzzy search in ElasticSearch.
+      parameters:
+      - explode: true
+        in: query
+        name: query
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_documents_search_get_200_response_inner'
+                type: array
+          description: Search results
+      summary: Search for a document
+      x-accepts:
+      - application/json
+  /documents/{documentId}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: documentId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Document deleted successfully
+      summary: Delete a document
+      x-accepts:
+      - application/json
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: documentId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_documents__documentId__put_request'
+        required: true
+      responses:
+        "200":
+          description: Document metadata updated
+      summary: Update a document's metadata
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /documents/{documentId}/status:
+    get:
+      description: Returns the current status of the OCR and indexing process for
+        the specified document.
+      parameters:
+      - explode: false
+        in: path
+        name: documentId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_documents__documentId__status_get_200_response'
+          description: Status of the OCR process
+      summary: Check the status of the OCR processing
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    _documents__documentId__status_get_200_response:
+      example:
+        status: pending
+      properties:
+        status:
+          enum:
+          - pending
+          - processing
+          - completed
+          - failed
+          type: string
+      type: object
+    _documents_search_get_200_response_inner:
+      example:
+        document_id: document_id
+        content: content
+        tags:
+        - tags
+        - tags
+      properties:
+        document_id:
+          type: string
+        content:
+          type: string
+        tags:
+          items:
+            type: string
+          type: array
+      type: object
+    _auth_register_post_request:
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      - username
+      type: object
+    _auth_login_post_request:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    _documents_post_request:
+      properties:
+        file:
+          format: binary
+          type: string
+        tags:
+          items:
+            type: string
+          type: array
+      type: object
+    _documents__documentId__put_request:
+      properties:
+        tags:
+          items:
+            type: string
+          type: array
+      type: object
