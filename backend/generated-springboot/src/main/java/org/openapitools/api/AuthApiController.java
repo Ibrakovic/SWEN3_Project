@@ -44,4 +44,15 @@ public class AuthApiController implements AuthApi {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<Void> authRegisterPost(@RequestBody AuthRegisterPostRequest authRegisterPostRequest) {
+        // Prüfe auf die Dummy-Daten: username = "test", password = "test"
+        if ("test".equals(authRegisterPostRequest.getUsername()) && "test".equals(authRegisterPostRequest.getPassword())) {
+            // Gebe HTTP 201 zurück, wenn die Daten korrekt sind
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } else {
+            // Gebe HTTP 400 zurück, wenn die Daten nicht korrekt sind
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }
