@@ -9,33 +9,50 @@ services:
       - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/dbms
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=test
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
     restart: always
     volumes:
       - ./logs:/app/logs
     depends_on:
-      - nginx  # Backend startet erst, wenn nginx bereit ist
+      - postgres
+      - nginx
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: dbms
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
 
   nginx:
     build:
-      context: ./frontend  # Verweis auf den webserver-Ordner
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "80:80"  # Externe Anfragen auf Port 80 leiten auf NGINX
+      - "80:80"
     restart: always
     depends_on:
-      - frontend  # NGINX startet erst, wenn das Frontend bereit ist
+      - frontend
     volumes:
-      # Kopiere die gebauten Dateien aus dem Frontend-Build
-      - frontend-output:/usr/share/nginx/html  # Mountet die gebauten Angular-Dateien in das NGINX HTML-Verzeichnis
+      - frontend-output:/usr/share/nginx/html
 
   frontend:
     build:
-      context: ./frontend  # Refers to the Angular frontend folder
+      context: ./frontend
       dockerfile: Dockerfile
     restart: always
     volumes:
-      # Mount the output of the Angular build to the shared volume
       - frontend-output:/app/dist/frontend
 
 volumes:
-  frontend-output:  # Volume für die gebauten Angular-Dateien
+  pgdata:
+  frontend-output:
