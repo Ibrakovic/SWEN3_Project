@@ -50,19 +50,19 @@ public interface DocumentsApi {
      * @return Document deleted successfully (status code 204)
      */
     @Operation(
-        operationId = "documentsDocumentIdDelete",
-        summary = "Delete a document",
-        responses = {
-            @ApiResponse(responseCode = "204", description = "Document deleted successfully")
-        }
+            operationId = "documentsDocumentIdDelete",
+            summary = "Delete a document",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Document deleted successfully")
+            }
     )
     @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/documents/{documentId}"
+            method = RequestMethod.DELETE,
+            value = "/documents/{documentId}"
     )
-    
+
     default ResponseEntity<Void> documentsDocumentIdDelete(
-        @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
+            @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -77,21 +77,21 @@ public interface DocumentsApi {
      * @return Document metadata updated (status code 200)
      */
     @Operation(
-        operationId = "documentsDocumentIdPut",
-        summary = "Update a document's metadata",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Document metadata updated")
-        }
+            operationId = "documentsDocumentIdPut",
+            summary = "Update a document's metadata",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Document metadata updated")
+            }
     )
     @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/documents/{documentId}",
-        consumes = { "application/json" }
+            method = RequestMethod.PUT,
+            value = "/documents/{documentId}",
+            consumes = { "application/json" }
     )
-    
+
     default ResponseEntity<Void> documentsDocumentIdPut(
-        @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId,
-        @Parameter(name = "DocumentsDocumentIdPutRequest", description = "", required = true) @Valid @RequestBody DocumentsDocumentIdPutRequest documentsDocumentIdPutRequest
+            @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId,
+            @Parameter(name = "DocumentsDocumentIdPutRequest", description = "", required = true) @Valid @RequestBody DocumentsDocumentIdPutRequest documentsDocumentIdPutRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -106,23 +106,23 @@ public interface DocumentsApi {
      * @return Status of the OCR process (status code 200)
      */
     @Operation(
-        operationId = "documentsDocumentIdStatusGet",
-        summary = "Check the status of the OCR processing",
-        description = "Returns the current status of the OCR and indexing process for the specified document.",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Status of the OCR process", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = DocumentsDocumentIdStatusGet200Response.class))
-            })
-        }
+            operationId = "documentsDocumentIdStatusGet",
+            summary = "Check the status of the OCR processing",
+            description = "Returns the current status of the OCR and indexing process for the specified document.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Status of the OCR process", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = DocumentsDocumentIdStatusGet200Response.class))
+                    })
+            }
     )
     @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/documents/{documentId}/status",
-        produces = { "application/json" }
+            method = RequestMethod.GET,
+            value = "/documents/{documentId}/status",
+            produces = { "application/json" }
     )
-    
+
     default ResponseEntity<DocumentsDocumentIdStatusGet200Response> documentsDocumentIdStatusGet(
-        @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
+            @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -147,22 +147,22 @@ public interface DocumentsApi {
      * @return Document uploaded and indexed (status code 201)
      */
     @Operation(
-        operationId = "documentsPost",
-        summary = "Upload a document",
-        description = "Uploads a document, performs OCR and indexes it in ElasticSearch.",
-        responses = {
-            @ApiResponse(responseCode = "201", description = "Document uploaded and indexed")
-        }
+            operationId = "documentsPost",
+            summary = "Upload a document",
+            description = "Uploads a document, performs OCR and indexes it in ElasticSearch.",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Document uploaded and indexed")
+            }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/documents",
-        consumes = { "multipart/form-data" }
+            method = RequestMethod.POST,
+            value = "/documents",
+            consumes = { "multipart/form-data" }
     )
-    
+
     default ResponseEntity<Void> documentsPost(
-        @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file,
-        @Parameter(name = "tags", description = "") @Valid @RequestPart(value = "tags", required = false) List<String> tags
+            @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file,
+            @Parameter(name = "tags", description = "") @Valid @RequestPart(value = "tags", required = false) List<String> tags
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -177,23 +177,23 @@ public interface DocumentsApi {
      * @return Search results (status code 200)
      */
     @Operation(
-        operationId = "documentsSearchGet",
-        summary = "Search for a document",
-        description = "Full-text and fuzzy search in ElasticSearch.",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Search results", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DocumentsSearchGet200ResponseInner.class)))
-            })
-        }
+            operationId = "documentsSearchGet",
+            summary = "Search for a document",
+            description = "Full-text and fuzzy search in ElasticSearch.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Search results", content = {
+                            @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = DocumentsSearchGet200ResponseInner.class)))
+                    })
+            }
     )
     @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/documents/search",
-        produces = { "application/json" }
+            method = RequestMethod.GET,
+            value = "/documents/search",
+            produces = { "application/json" }
     )
-    
+
     default ResponseEntity<List<DocumentsSearchGet200ResponseInner>> documentsSearchGet(
-        @NotNull @Parameter(name = "query", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "query", required = true) String query
+            @NotNull @Parameter(name = "query", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "query", required = true) String query
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

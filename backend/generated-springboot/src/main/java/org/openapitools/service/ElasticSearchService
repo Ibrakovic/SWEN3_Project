@@ -1,0 +1,26 @@
+package org.openapitools.service;
+
+import org.openapitools.model.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ElasticSearchService {
+
+    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Autowired
+    public ElasticSearchService(ElasticsearchRestTemplate elasticsearchRestTemplate) {
+        this.elasticsearchRestTemplate = elasticsearchRestTemplate;
+    }
+
+    public Document saveDocument(Document document) {
+        return elasticsearchRestTemplate.save(document);
+    }
+
+    public List<Document> searchDocuments(String query) {
+        // Hier kannst du die Logik für die Volltextsuche implementieren
+        return elasticsearchRestTemplate.queryForList(...);
+    }
+}
