@@ -13,7 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.openapitools.service.ElasticSearchService;
+import org.openapitools.model.DocumentStatus;
 
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -26,12 +29,14 @@ public class DocumentsApiController implements DocumentsApi {
     private final NativeWebRequest request;
     private final DocumentService documentService;
     private final DocumentMapper documentMapper;
+    private final ElasticSearchService elasticSearchService;
 
     @Autowired
-    public DocumentsApiController(NativeWebRequest request, DocumentService documentService, DocumentMapper documentMapper) {
+    public DocumentsApiController(NativeWebRequest request, DocumentService documentService, DocumentMapper documentMapper, ElasticSearchService elasticSearchService) {
         this.request = request;
         this.documentService = documentService;
         this.documentMapper = documentMapper;
+        this.elasticSearchService = elasticSearchService;
     }
 
     @Override
@@ -44,9 +49,16 @@ public class DocumentsApiController implements DocumentsApi {
     public ResponseEntity<Void> documentsPost(
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "tags", required = false) List<String> tags
-    ) throws IOException {
+    ) {
         Document document = new Document();
-        document.setContent(new String(file.getBytes()));
+        try {
+            if (file != null) {
+                document.setContent(new String(file.getBytes()));
+            }
+        } catch (IOException e) {
+            // Optional: Log the error and return an error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         document.setTags(tags);
         document.setStatus(DocumentStatus.PENDING); // Initialstatus
         documentService.createDocument(document);
@@ -94,24 +106,13 @@ public class DocumentsApiController implements DocumentsApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Search for a document (ElasticSearch implementation is needed for full-text search)
-    @Override
-    public ResponseEntity<List<DocumentsSearchGet200ResponseInner>> documentsSearchGet(
-            @RequestParam(value = "query", required = true) String query
-    ) {
-        // Placeholder: Actual ElasticSearch logic would go here
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @Autowired
-    private ElasticSearchService elasticSearchService;
-
+    // Search for a document (ElasticSearch implementation)
     @Override
     public ResponseEntity<List<DocumentsSearchGet200ResponseInner>> documentsSearchGet(
             @RequestParam(value = "query", required = true) String query
     ) {
         List<Document> searchResults = elasticSearchService.searchDocuments(query);
-        // Konvertiere die Dokumente in das entsprechende DTO-Format und gib sie zurück
+        // Convert the documents into DTO format and return them
         List<DocumentsSearchGet200ResponseInner> response = searchResults.stream()
                 .map(document -> new DocumentsSearchGet200ResponseInner()
                         .documentId(document.getId().toString())
@@ -121,7 +122,4 @@ public class DocumentsApiController implements DocumentsApi {
 
         return ResponseEntity.ok(response);
     }
-
-
-
 }

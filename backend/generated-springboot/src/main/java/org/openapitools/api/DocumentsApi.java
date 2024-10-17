@@ -8,17 +8,14 @@ package org.openapitools.api;
 import org.openapitools.model.DocumentsDocumentIdPutRequest;
 import org.openapitools.model.DocumentsDocumentIdStatusGet200Response;
 import org.openapitools.model.DocumentsSearchGet200ResponseInner;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +25,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-05T12:12:53.257010100+02:00[Europe/Vienna]", comments = "Generator version: 7.8.0")
 @Validated
 @Tag(name = "documents", description = "the documents API")
 public interface DocumentsApi {
@@ -46,7 +40,7 @@ public interface DocumentsApi {
     /**
      * DELETE /documents/{documentId} : Delete a document
      *
-     * @param documentId  (required)
+     * @param documentId (required)
      * @return Document deleted successfully (status code 204)
      */
     @Operation(
@@ -60,20 +54,17 @@ public interface DocumentsApi {
             method = RequestMethod.DELETE,
             value = "/documents/{documentId}"
     )
-
     default ResponseEntity<Void> documentsDocumentIdDelete(
             @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
     }
 
-
     /**
-     * PUT /documents/{documentId} : Update a document&#39;s metadata
+     * PUT /documents/{documentId} : Update a document's metadata
      *
-     * @param documentId  (required)
-     * @param documentsDocumentIdPutRequest  (required)
+     * @param documentId                    (required)
+     * @param documentsDocumentIdPutRequest (required)
      * @return Document metadata updated (status code 200)
      */
     @Operation(
@@ -86,23 +77,20 @@ public interface DocumentsApi {
     @RequestMapping(
             method = RequestMethod.PUT,
             value = "/documents/{documentId}",
-            consumes = { "application/json" }
+            consumes = {"application/json"}
     )
-
     default ResponseEntity<Void> documentsDocumentIdPut(
             @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId,
             @Parameter(name = "DocumentsDocumentIdPutRequest", description = "", required = true) @Valid @RequestBody DocumentsDocumentIdPutRequest documentsDocumentIdPutRequest
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
     }
-
 
     /**
      * GET /documents/{documentId}/status : Check the status of the OCR processing
      * Returns the current status of the OCR and indexing process for the specified document.
      *
-     * @param documentId  (required)
+     * @param documentId (required)
      * @return Status of the OCR process (status code 200)
      */
     @Operation(
@@ -118,32 +106,20 @@ public interface DocumentsApi {
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/documents/{documentId}/status",
-            produces = { "application/json" }
+            produces = {"application/json"}
     )
-
     default ResponseEntity<DocumentsDocumentIdStatusGet200Response> documentsDocumentIdStatusGet(
             @Parameter(name = "documentId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("documentId") String documentId
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"status\" : \"pending\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
     }
-
 
     /**
      * POST /documents : Upload a document
      * Uploads a document, performs OCR and indexes it in ElasticSearch.
      *
-     * @param file  (optional)
-     * @param tags  (optional)
+     * @param file (optional)
+     * @param tags (optional)
      * @return Document uploaded and indexed (status code 201)
      */
     @Operation(
@@ -157,23 +133,20 @@ public interface DocumentsApi {
     @RequestMapping(
             method = RequestMethod.POST,
             value = "/documents",
-            consumes = { "multipart/form-data" }
+            consumes = {"multipart/form-data"}
     )
-
     default ResponseEntity<Void> documentsPost(
             @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file,
             @Parameter(name = "tags", description = "") @Valid @RequestPart(value = "tags", required = false) List<String> tags
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
     }
-
 
     /**
      * GET /documents/search : Search for a document
      * Full-text and fuzzy search in ElasticSearch.
      *
-     * @param query  (required)
+     * @param query (required)
      * @return Search results (status code 200)
      */
     @Operation(
@@ -189,23 +162,11 @@ public interface DocumentsApi {
     @RequestMapping(
             method = RequestMethod.GET,
             value = "/documents/search",
-            produces = { "application/json" }
+            produces = {"application/json"}
     )
-
     default ResponseEntity<List<DocumentsSearchGet200ResponseInner>> documentsSearchGet(
             @NotNull @Parameter(name = "query", description = "", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "query", required = true) String query
     ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"document_id\" : \"document_id\", \"content\" : \"content\", \"tags\" : [ \"tags\", \"tags\" ] }, { \"document_id\" : \"document_id\", \"content\" : \"content\", \"tags\" : [ \"tags\", \"tags\" ] } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
     }
-
 }

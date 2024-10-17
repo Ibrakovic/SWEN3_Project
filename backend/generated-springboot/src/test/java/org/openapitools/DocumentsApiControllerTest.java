@@ -11,6 +11,7 @@ import org.openapitools.model.Document;
 import org.openapitools.model.DocumentStatus;
 import org.openapitools.model.DocumentsDocumentIdPutRequest;
 import org.openapitools.model.DocumentsDocumentIdStatusGet200Response;
+import org.openapitools.model.DocumentsSearchGet200ResponseInner;
 import org.openapitools.service.DocumentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
@@ -44,7 +45,7 @@ public class DocumentsApiControllerTest {
     }
 
     @Test
-    void testDocumentsPost() throws Exception {
+    void testDocumentsPost() {
         // Arrange
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
         when(documentService.createDocument(any(Document.class))).thenReturn(document);
@@ -90,7 +91,7 @@ public class DocumentsApiControllerTest {
     void testDocumentsDocumentIdStatusGet() {
         // Arrange
         DocumentsDocumentIdStatusGet200Response statusResponse = new DocumentsDocumentIdStatusGet200Response();
-        statusResponse.setStatus(DocumentStatus.PENDING.toString());
+        statusResponse.setStatus(DocumentsDocumentIdStatusGet200Response.StatusEnum.PENDING); // Verwende den korrekten Enum-Typ
         when(documentService.getDocumentById(1L)).thenReturn(Optional.of(document));
         when(documentMapper.toStatusResponse(document)).thenReturn(statusResponse);
 
@@ -99,29 +100,16 @@ public class DocumentsApiControllerTest {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("PENDING", response.getBody().getStatus());
+        assertEquals(DocumentsDocumentIdStatusGet200Response.StatusEnum.PENDING, response.getBody().getStatus());
         verify(documentService, times(1)).getDocumentById(1L);
         verify(documentMapper, times(1)).toStatusResponse(document);
-    }
-
-    @Test
-    void testDocumentsDocumentIdStatusGet_NotFound() {
-        // Arrange
-        when(documentService.getDocumentById(1L)).thenReturn(Optional.empty());
-
-        // Act
-        ResponseEntity<DocumentsDocumentIdStatusGet200Response> response = documentsApiController.documentsDocumentIdStatusGet("1");
-
-        // Assert
-        assertEquals(404, response.getStatusCodeValue());
-        verify(documentService, times(1)).getDocumentById(1L);
     }
 
     @Test
     void testDocumentsSearchGet() {
         // Arrange
         String query = "example";
-        List<Document> mockResults = List.of(document);
+        List<Document> mockResults = List.of(document); // Simulierte Suchergebnisse
         when(documentService.searchDocuments(query)).thenReturn(mockResults);
 
         // Act

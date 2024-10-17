@@ -8,6 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.openapitools.model.Document;
 import org.openapitools.repository.DocumentRepository;
 import org.openapitools.service.DocumentService;
+import org.openapitools.model.DocumentStatus;
+
 
 import java.util.Optional;
 
