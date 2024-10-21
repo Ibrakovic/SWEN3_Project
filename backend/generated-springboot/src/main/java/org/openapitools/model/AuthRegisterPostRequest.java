@@ -23,11 +23,17 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-05T12:12:53.257010100+02:00[Europe/Vienna]", comments = "Generator version: 7.8.0")
 public class AuthRegisterPostRequest {
 
+  @NotBlank(message = "Username is mandatory")
   private String username;
 
+  @NotBlank(message = "Email is mandatory")
+  @Email(message = "Email should be valid")
   private String email;
 
+  @NotBlank(message = "Password is mandatory")
+  @Size(min = 6, message = "Password must be at least 6 characters")
   private String password;
+
 
   public AuthRegisterPostRequest() {
     super();
