@@ -1,16 +1,15 @@
 package org.openapitools.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
+import org.openapitools.dto.UserDTO;
 import org.openapitools.model.User;
-import org.openapitools.model.UserDto;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface UserMapper {
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    // Mapping von DTO zu Entität
-    User toEntity(UserDto userDto);
+    User userDTOToUser(UserDTO userDTO);
 
-    // Mapping von Entität zu DTO
-    UserDto toDto(User user);
+    UserDTO userToUserDTO(User user);
 }
