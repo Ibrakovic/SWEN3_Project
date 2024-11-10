@@ -117,5 +117,6 @@ public class AuthLoginPostRequest {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
 }
 

@@ -1,1 +1,4 @@
-org\openapitools\OpenApiGeneratorApplicationTests.class
+org\openapitools\service\AuthServiceTest.class
+org\openapitools\model\UserValidationTest.class
+org\openapitools\mapper\UserMapperTest.class
+org\openapitools\model\AuthRegisterPostRequestValidationTest.class
