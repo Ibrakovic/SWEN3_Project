@@ -1,22 +1,16 @@
 package org.openapitools.model;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
+import java.util.Objects;
+
+import javax.annotation.processing.Generated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
-import javax.annotation.Generated;
 
 /**
  * DocumentsSearchGet200ResponseInner
@@ -26,27 +20,28 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-05T12:12:53.257010100+02:00[Europe/Vienna]", comments = "Generator version: 7.8.0")
 public class DocumentsSearchGet200ResponseInner {
 
-  private String documentId;
+	private String documentId;
 
-  private String content;
+	private String content;
 
-  @Valid
-  private List<String> tags = new ArrayList<>();
+	@Valid
+	private List<String> tags = new ArrayList<>();
 
-  public DocumentsSearchGet200ResponseInner documentId(String documentId) {
-    this.documentId = documentId;
-    return this;
-  }
+	public DocumentsSearchGet200ResponseInner documentId(String documentId) {
+		this.documentId = documentId;
+		return this;
+	}
 
-  /**
-   * Get documentId
-   * @return documentId
-   */
-  
-  @Schema(name = "document_id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("document_id")
-  public String getDocumentId() {
-    return documentId;
+	/**
+	 * Get documentId
+	 * 
+	 * @return documentId
+	 */
+
+	@Schema(name = "document_id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	@JsonProperty("document_id")
+	public String getDocumentId() {
+		return documentId;
   }
 
   public void setDocumentId(String documentId) {

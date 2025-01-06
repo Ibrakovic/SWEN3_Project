@@ -1,11 +1,12 @@
 package org.openapitools.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.openapitools.dto.UserDTO;
-import org.openapitools.model.User;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.openapitools.entity.User;
 
 public class UserMapperTest {
 

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 import org.openapitools.exception.DocumentNotFoundException;
-import org.openapitools.service.DocumentService;
+import org.openapitools.service.impl.DocumentService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 public class DocumentServiceTest {

@@ -2,12 +2,12 @@ package org.openapitools.mapper;
 
 import javax.annotation.processing.Generated;
 import org.openapitools.dto.UserDTO;
-import org.openapitools.model.User;
+import org.openapitools.entity.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-31T18:33:35+0100",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 23.0.1 (Oracle Corporation)"
+    date = "2025-01-03T18:43:20+0530",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 11.0.16 (Oracle Corporation)"
 )
 public class UserMapperImpl implements UserMapper {
 

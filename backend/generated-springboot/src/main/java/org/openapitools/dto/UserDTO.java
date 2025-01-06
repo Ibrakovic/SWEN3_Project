@@ -1,10 +1,10 @@
 package org.openapitools.dto;
 
-import org.openapitools.model.AuthRegisterPostRequest;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import org.openapitools.model.AuthRegisterPostRequest;
 
 public class UserDTO {
     private Long id;
